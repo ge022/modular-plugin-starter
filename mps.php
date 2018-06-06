@@ -30,9 +30,10 @@
    */
   
   define( 'MPS__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+  define( 'MPS__PLUGIN_IDENTIFIER', plugin_basename( __FILE__ ) );
   
   require_once( MPS__PLUGIN_DIR . 'class.mps.php' );
-  require_once (MPS__PLUGIN_DIR . 'class.mps-options.php');
+  require_once( MPS__PLUGIN_DIR . 'class.mps-options.php' );
   
   register_activation_hook( __FILE__, array( 'MPS', 'plugin_activate' ) );
   register_deactivation_hook( __FILE__, array( 'MPS', 'plugin_deactivate' ) );

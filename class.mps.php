@@ -12,8 +12,6 @@
     
     class MPS {
       
-      const CUSTOM_POST_TYPE = 'books';
-      
       /**
        * Holds the singleton instance of this class
        */
@@ -35,12 +33,15 @@
        * Constructor. Initializes WordPress hooks
        */
       private function __construct() {
-      
+  
+        // Add the plugin settings pages
+        add_action( 'admin_menu', array( $this, 'admin_init' ) );
+        
       }
       
       public static function plugin_activate() {
         MPS_Options::update_option( 'activated', 1 );
-  
+        
         MPS::plugin_initialize();
         
         flush_rewrite_rules();
@@ -51,6 +52,7 @@
       }
       
       private static function plugin_initialize() {
+        
         MPS::load_modules();
       }
       
@@ -69,6 +71,36 @@
       
       public static function get_module_path( $slug ) {
         return MPS__PLUGIN_DIR . "modules/$slug.php";
+      }
+  
+  
+      /**
+       *  Plugin settings pages and links
+       */
+      function admin_init() {
+  
+        add_menu_page( __('MPS', 'mps'), __('MPS', 'mps'), 'manage_options', 'mps', array( $this, 'admin_index' ), 'dashicons-admin-page', 110 );
+        
+        // Add plugin settings page link to plugins page
+        add_filter( 'plugin_action_links_' . MPS__PLUGIN_IDENTIFIER, array( $this, 'plugin_action_links' ) );
+        
+      }
+  
+      function plugin_action_links( $actions ) {
+        
+        $settings_link = array( 'settings-link' => sprintf( '<a href="%s">%s</a>', MPS::admin_url( 'page=mps' ), __( 'Settings', 'mps' ) ) );
+    
+        return array_merge( $settings_link, $actions );
+      }
+  
+      public static function admin_url( $args = null ) {
+        $args = wp_parse_args( $args, array( 'page' => 'mps' ) );
+        $url = add_query_arg( $args, admin_url( 'admin.php' ) );
+        return $url;
+      }
+      
+      function admin_index() {
+        require_once MPS__PLUGIN_DIR . 'views/admin/admin.php';
       }
       
     }

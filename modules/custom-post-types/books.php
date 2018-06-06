@@ -51,12 +51,12 @@
         self::OPTION_NAME,
         '<span class="mps-cpt-option">' . __( 'Books', 'mps' ) . '</span>',
         array( $this, 'setting_html' ),
-        'writing',
+        'mps',
         'mps_cpt_section'
       );
     
       register_setting(
-        'writing',
+        self::CUSTOM_POST_TYPE,
         self::OPTION_NAME,
         'intval'
       );

@@ -13,7 +13,7 @@
       'mps_cpt_section',
       '<span id="mps-cpt-options">' . __( 'Custom Post Types', 'mps' ) . '</span>',
       'mps_cpt_section_callback',
-      'writing'
+      'mps'
     );
   }
   add_action( 'admin_init', 'mps_cpt_add_settings' );
