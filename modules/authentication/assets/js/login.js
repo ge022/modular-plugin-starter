@@ -1,0 +1,1 @@
+$('.login').append('<div>Login JS working</div>');
