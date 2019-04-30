@@ -14,14 +14,6 @@ class MPS_Authentication {
 	}
 
 	private function __construct() {
-		$this->init_shortcodes();
-	}
-
-	/**
-	 * Add the authentication shortcodes
-	 */
-	function init_shortcodes() {
-
 		add_action( 'admin_init', [ $this, 'settings_api_init' ] );
 
 		$setting = MPS_Options::get_option_and_ensure_autoload( self::OPTION_NAME, '0' );
@@ -29,7 +21,30 @@ class MPS_Authentication {
 			return;
 		}
 
-		add_shortcode( 'mps_auth_login', [$this, 'mps_auth_login'] );
+		$this->init_ajax();
+		$this->init_shortcodes();
+	}
+
+	/**
+	 * Add the authentication ajax actions
+	 */
+	function init_ajax() {
+		add_action( 'wp_ajax_mps_authentication_action', [ $this, 'mps_authentication_action' ] );
+	}
+
+	/**
+	 * Add the authentication shortcodes
+	 */
+	function init_shortcodes() {
+		add_shortcode( 'mps_auth_login', [ $this, 'mps_auth_login' ] );
+	}
+
+	/**
+	 * The login ajax POST request.
+	 */
+	function mps_authentication_action() {
+		echo json_encode(['test' => 'The ajax test is working']);
+		wp_die();
 	}
 
 	/**
@@ -76,9 +91,9 @@ class MPS_Authentication {
 	 */
 	function setting_html() {
 		echo '<label for="' . esc_attr( self::OPTION_NAME ) . '">' .
-		       '<input name="' . esc_attr( self::OPTION_NAME ) . '" id="' . esc_attr( self::OPTION_NAME ) . '"' . checked( get_option( self::OPTION_NAME, '0' ), true, false ) . 'type="checkbox" value="1" />' .
-		       esc_html__( 'Enable Authentication for this site.', 'mps' ) .
-		       '</label>';
+		     '<input name="' . esc_attr( self::OPTION_NAME ) . '" id="' . esc_attr( self::OPTION_NAME ) . '"' . checked( get_option( self::OPTION_NAME, '0' ), true, false ) . 'type="checkbox" value="1" />' .
+		     esc_html__( 'Enable Authentication for this site.', 'mps' ) .
+		     '</label>';
 	}
 }
 
